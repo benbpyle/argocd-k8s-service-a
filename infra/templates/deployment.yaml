@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "infra.fullname" . }}
   labels:
-    {{ include "infra.labels" . | nindent 4 }}
+    app: service-a
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
