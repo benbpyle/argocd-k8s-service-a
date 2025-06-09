@@ -5,12 +5,11 @@ metadata:
   labels:
     {{ include "infra.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
-{{/*  selector:*/}}
-{{/*    matchLabels:*/}}
-{{/*      {{ include "infra.selectorLabels" . | nindent 6 }}*/}}
+  selector:
+    matchLabels:
+      app: service-a
+
   template:
     spec:
       containers:
