@@ -1,0 +1,24 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: service-b-deployment
+  namespace: rust-services
+  annotations:
+    scaledobject.keda.sh/transfer-hpa-ownership: "true"
+spec:
+  scaleTargetRef:
+    apiVersion:    apps/v1        # Optional. Default: apps/v1
+    kind:          Deployment     # Optional. Default: Deployment
+    name:          service-a      # Mandatory. Must be in the same namespace as the ScaledObject
+  pollingInterval:  5                    # Optional. Default: 5 seconds
+  cooldownPeriod:   600                  # Optional. Default: 300 seconds
+  minReplicaCount:  1                # Optional. Default: 0
+  maxReplicaCount:  5                    # Optional. Default: 100
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: 'http://prometheus-server.prometheus.svc.cluster.local/'
+        metricName: 'istio_total_requests'
+        threshold: '5'
+        query: 'round(sum(rate(istio_requests_total{ destination_workload="service-b", destination_workload_namespace="rust-services", response_code!="404" }[5m])),2)'
+        # timeout: '1000' # Optional. Custom timeout for the HTTP client used in this scaler
