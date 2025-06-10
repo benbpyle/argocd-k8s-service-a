@@ -9,7 +9,7 @@ spec:
   scaleTargetRef:
     apiVersion:    argoproj.io/v1alpha1
     kind:          Rollout
-    name:          service-a
+    name:          service-a-rollout
   pollingInterval:  5
   cooldownPeriod:   600
   minReplicaCount:  1
