@@ -8,7 +8,7 @@ metadata:
 spec:
   scaleTargetRef:
     apiVersion:    apps/v1        # Optional. Default: apps/v1
-    kind:          Deployment     # Optional. Default: Deployment
+    kind:          Rollout     # Optional. Default: Deployment
     name:          service-a      # Mandatory. Must be in the same namespace as the ScaledObject
   pollingInterval:  5                    # Optional. Default: 5 seconds
   cooldownPeriod:   600                  # Optional. Default: 300 seconds
