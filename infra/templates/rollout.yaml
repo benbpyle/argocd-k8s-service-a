@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: service-a-rollout
+spec:
+  replicas: 1
+  strategy:
+    canary:
+      steps:
+        - setWeight: 100
+        - pause: {}
+{{/*        - setWeight: 40*/}}
+{{/*        - pause: {duration: 10}*/}}
+{{/*        - setWeight: 60*/}}
+{{/*        - pause: {duration: 10}*/}}
+{{/*        - setWeight: 80*/}}
+{{/*        - pause: {duration: 10}*/}}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: service-a
+  template:
+    metadata:
+      labels:
+        app: service-a
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: "BIND_ADDRESS"
+              value: "0.0.0.0:3000"
+            - name: "DD_TRACING_ENABLED"
+              value: "false"
+{{/*          livenessProbe:*/}}
+{{/*                  {{ toYaml .Values.livenessProbe | nindent 12 }}*/}}
+{{/*          readinessProbe:*/}}
+{{/*                  {{ toYaml .Values.readinessProbe | nindent 12 }}*/}}
+{{/*          resources:*/}}
+{{/*                  {{ toYaml .Values.resources | nindent 12 }}*/}}
+{{/*                {{- with .Values.volumeMounts }}*/}}
+{{/*          volumeMounts:*/}}
+{{/*                  {{ toYaml . | nindent 12 }}*/}}
+{{/*                {{- end }}*/}}
+{{/*            {{- with .Values.volumes }}*/}}
+{{/*        volumes:*/}}
+{{/*              {{ toYaml . | nindent 8 }}*/}}
+{{/*            {{- end }}*/}}
+{{/*            {{- with .Values.nodeSelector }}*/}}
+{{/*        nodeSelector:*/}}
+{{/*              {{ toYaml . | nindent 8 }}*/}}
+{{/*            {{- end }}*/}}
+{{/*            {{- with .Values.affinity }}*/}}
+{{/*        affinity:*/}}
+{{/*              {{ toYaml . | nindent 8 }}*/}}
+{{/*            {{- end }}*/}}
+{{/*            {{- with .Values.tolerations }}*/}}
+{{/*        tolerations:*/}}
+{{/*              {{ toYaml . | nindent 8 }}*/}}
+{{/*            {{- end }}*/}}

@@ -20,5 +20,5 @@ spec:
         serverAddress: 'http://prometheus-server.prometheus.svc.cluster.local/'
         metricName: 'istio_total_requests'
         threshold: '5'
-        query: 'round(sum(rate(istio_requests_total{ destination_workload="service-b", destination_workload_namespace="rust-services", response_code!="404" }[5m])),2)'
+        query: 'round(sum(rate(istio_requests_total{ destination_workload="service-a", destination_workload_namespace="rust-services", response_code!="404" }[5m])),2)'
         # timeout: '1000' # Optional. Custom timeout for the HTTP client used in this scaler
